@@ -5,6 +5,8 @@ import pandas as pd
 import torch
 from numpy import nan as NaN
 
+
+# 创建一个人工数据集，并存储在csv文件
 os.makedirs(os.path.join('..', 'data'), exist_ok=True)  # 在上级目录创建data文件夹
 datafile = os.path.join('..', 'data', 'house_tiny.csv')  # 创建文件
 with open(datafile, 'w') as f:  # 往文件中写数据
@@ -17,6 +19,7 @@ with open(datafile, 'w') as f:  # 往文件中写数据
 data = pd.read_csv(datafile)  # 可以看到原始表格中的空值NA被识别成了NaN
 print('1.原始数据:\n', data)
 
+# 为了处理缺失的数据，典型的方法包括插值和删除，这里，我们将考虑插值
 inputs, outputs = data.iloc[:, 0: 2], data.iloc[:, 2]
 inputs = inputs.fillna(inputs.mean())  # 用均值填充NaN
 print(inputs)
@@ -26,6 +29,7 @@ print(outputs)
 inputs = pd.get_dummies(inputs, dummy_na=True)
 print('2.利用pandas中的get_dummies函数处理:\n', inputs)
 
+# 现在inputs和outputs中的所有条目都是数值类型，它们可以转换为张量格式
 x, y = torch.tensor(inputs.values), torch.tensor(outputs.values)
 print('3.转换为张量：')
 print(x)
